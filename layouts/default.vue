@@ -21,7 +21,7 @@
             <NuxtLink class="nav-link" to="/">首頁</NuxtLink>
           </li>
           <li class="nav-item">
-            <NuxtLink class="nav-link" to="/room" target="_blank"
+            <NuxtLink class="nav-link" to="/room"
               >房型</NuxtLink
             >
           </li>
