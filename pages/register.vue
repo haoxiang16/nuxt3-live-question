@@ -21,6 +21,31 @@ const userRegisteObject = ref({
 //   showConfirmButton: false,
 //   timer: 1500,
 // });
+
+const registerMenber = async (data)=>{
+  try {
+    const response = await $fetch("https://nuxr3.zeabur.app/api/v1/user/signup", {
+    method:'POST',
+    body: data
+  });
+  await $swal.fire({
+      position: "center",
+      icon: "success",
+      title: "註冊成功",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  } catch (error) {
+    const { message } = error.response._data;
+    await $swal.fire({
+      position: "center",
+      icon: "error",
+      title: message,
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  }
+}
 </script>
 
 <template>
@@ -37,6 +62,7 @@ const userRegisteObject = ref({
                   class="form-control"
                   id="firstName"
                   placeholder="王小明"
+                  v-model="userRegisteObject.name"
                   required
                 />
                 <label for="firstName"
@@ -51,6 +77,7 @@ const userRegisteObject = ref({
                   id="email"
                   placeholder="example@gmail.com"
                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                  v-model="userRegisteObject.email"
                   required
                 />
                 <label for="email"
@@ -65,6 +92,7 @@ const userRegisteObject = ref({
                   id="password"
                   placeholder="請輸入 8 碼以上密碼"
                   pattern=".{8,}"
+                  v-model="userRegisteObject.password"
                   required
                 />
                 <label for="password"
@@ -79,6 +107,7 @@ const userRegisteObject = ref({
                   id="phone"
                   placeholder="0912345678"
                   pattern="(\+886|0)?9\d{8}|(\+886|0)?2\d{8}|\d{3}-\d{4}-\d{4}"
+                  v-model="userRegisteObject.phone"
                   required
                 />
                 <label for="phone">電話</label>
@@ -89,6 +118,7 @@ const userRegisteObject = ref({
                   type="date"
                   class="form-control"
                   id="dateInput"
+                  v-model="userRegisteObject.birthday"
                   required
                 />
                 <label for="dateInput">出生年月日</label>
@@ -103,6 +133,7 @@ const userRegisteObject = ref({
                       id="zipcode"
                       placeholder="100"
                       pattern="\d{3,}"
+                      v-model.number="userRegisteObject.address.zipcode"
                       required
                     />
                     <label for="zipcode">郵遞區號</label>
@@ -115,6 +146,7 @@ const userRegisteObject = ref({
                       class="form-control"
                       id="address"
                       placeholder="台北市中正區重慶南路一段"
+                       v-model="userRegisteObject.address.detail"
                       required
                     />
                     <label for="address">詳細地址</label>
@@ -122,7 +154,7 @@ const userRegisteObject = ref({
                 </div>
               </div>
 
-              <button class="btn btn-lg btn-primary w-100" type="submit">
+              <button class="btn btn-lg btn-primary w-100" type="submit" @click="registerMenber(userRegisteObject)">
                 註冊
               </button>
             </form>
