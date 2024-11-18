@@ -2,26 +2,19 @@
 const router = useRouter();
 const route = useRoute();
 
-const roomsInfo = ref([]);
 // 串接 API 取得房型詳細資料
 // API path : https://nuxr3.zeabur.app/api/v1/rooms/{id}
 // 將資料渲染至下方的 div.room-page 區塊
 const { id } = route.params;
 const apiUrl = `https://nuxr3.zeabur.app/api/v1/rooms/${id}`;
-fetch(apiUrl)
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("取得房型資料失敗");
-    }
-    return response.json();
-  })
-  .then((data) => {
-    const { result } = data;
-    roomsInfo.value = result;
-  })
-  .catch((error) => {
-    console.error("發生錯誤:", error);
-  });
+
+const { data: roomsInfo } = await useFetch(apiUrl, {
+  transform: (data) => data.result,
+  onResponseError: ({ response }) => {
+    const { message } = response._data;
+    console.error("Error:", message);
+  }
+});
 
   const isProvide = (isProvideBoolean = false) => {
   return isProvideBoolean ? "提供" : "未提供";

@@ -1,24 +1,15 @@
 <script setup>
 const route = useRoute();
 const router = useRouter();
-const roomsList = ref([]);
-
 const apiUrl = "https://nuxr3.zeabur.app/api/v1/rooms";
 
-fetch(apiUrl)
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("取得房型資料失敗");
-    }
-    return response.json();
-  })
-  .then((data) => {
-    const { result } = data;
-    roomsList.value = result;
-  })
-  .catch((error) => {
-    console.error("發生錯誤:", error);
-  });
+const { data: roomsList } = useFetch(apiUrl, {
+  transform: (data) => data.result,
+  onResponseError({ response }) {
+    const { message } = response._data;
+    console.error("Error:", message);
+  },
+})
 </script>
 
 <template>
